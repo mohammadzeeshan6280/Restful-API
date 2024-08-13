@@ -32,86 +32,64 @@ app.post("/students", (req, res) => {
 
 app.post("/students", async (req, res) => {
   try {
-        const user = new Student(req.body);
-        const createUser = await user.save();
-        res.status(201).send(createUser);
+    const user = new Student(req.body);
+    const createUser = await user.save();
+    res.status(201).send(createUser);
   } catch (e) {
-        res.status(400).send(e);
+    res.status(400).send(e);
+  }
+});
+
+// read the data of registered Students
+app.get("/students", async (req, res) => {
+  try {
+    const studentsData = await Student.find();
+    res.send(studentsData);
+  } catch (e) {
+    res.send(e);
+  }
+});
+
+// get the indivisual Student data using id
+app.get("/students/:id", async (req, res) => {
+  try {
+    // const _id = req.params;
+    // console.log(req.params)
+    // console.log(req.params.id)
+    // res.send(req.params)
+    // res.send(req.params.id)
+
+    const _id = req.params.id;
+    const studentData = await Student.findById(_id);
+    console.log(studentData);
+
+    if (!studentData) {
+      return res.status(404).send();
+    } else {
+      res.send(studentData);
+    }
+  } catch (e) {
+    res.status(500).send(e);
   }
 });
 
 
-
-
-// read the data of registered Students
-app.get("/students", async (req, res) => {
-    try{
-      const studentsData = await Student.find();
-      res.send(studentsData)
-    } catch(e){
-        res.send(e)
-    }
-})
-
-// get the indivisual Student data using id
-app.get("/students/:id", async (req, res) => {
-    try{
-            // const _id = req.params;
-            // console.log(req.params)
-            // console.log(req.params.id)
-            // res.send(req.params)
-            // res.send(req.params.id)
-
-            const _id = req.params.id;
-          const studentData = await Student.findById(_id)
-          console.log(studentData)
-
-          if(!studentData){
-            return res.status(404).send()
-          } else {
-            res.send(studentData)
-          }
-    } catch(e){
-            res.status(500).send(e)
-    }
-})
-
-
-// Detele the students by it id
-app.delete("/students/:id", async (req, res) =>{
-
-    try{
-        // const id = req.params.id;
-    const deleteStudent = await Student.findByIdAndDelete(req.params.id);
-if(!req.params.id){
-    return res.status(400).send()
-} 
-res.send(deleteStudent)
-    } catch(e){
-        res.status(500).send(e)
-    }
-
-})
-
+// Update the Student by it id
+app.patch("/students/:id", async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const updateStudents = await Student.findByIdAndUpdate(_id, req.body, {
+        new : true // current new update show
+    });
+    res.send(updateStudents);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
 
 app.listen(port, () => {
-    console.log(`connection is setup at ${port}`);
-  });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  console.log(`connection is setup at ${port}`);
+});
 
 // You DO NOT NEED express.json() and express.urlencoded()
 // for GET Requests or DELETE Requests. we only need it for post and put req.

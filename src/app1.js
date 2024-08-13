@@ -30,6 +30,7 @@ app.post("/students", (req, res) => {
 
 */
 
+// Async Await Function
 app.post("/students", async (req, res) => {
   try {
         const user = new Student(req.body);

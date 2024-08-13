@@ -7,7 +7,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json()); 
-app.use(studentRouter);
+app.use(studentRouter); // Router define path
 
 // app.get("/", (req,res) => {
 //    res.send("Hello from the other sides. by zeeshan ansari")
